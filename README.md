@@ -232,24 +232,6 @@ Once both servers are running, open `http://localhost:3000` in your browser and 
    
 
 
-## 🎨 UI Features
-
-### Neon Bright Color Theme:
-- **Neon Cyan** (#00f0ff) - Primary accent
-- **Neon Pink** (#ff006e) - Secondary accent
-- **Neon Green** (#39ff14) - Success states
-- **Neon Purple** (#b300ff) - Interactive elements
-- **Dark Background** - High contrast for readability
-
-### Interactive Features:
-✨ **Auto-scrolling** messages  
-✨ **Real-time typing** indicators  
-✨ **Tool badges** showing which tools were used  
-✨ **Smooth animations** and transitions  
-✨ **Responsive design** - Works on mobile and desktop  
-✨ **User session management** - Maintains context across messages  
-
----
 
 ## 🔌 API Endpoints
 
