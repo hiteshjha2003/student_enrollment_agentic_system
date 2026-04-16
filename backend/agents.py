@@ -43,15 +43,18 @@ class StudentEnrollmentAgent:
     def extract_entities(self, user_message: str) -> Dict[str, str]:
         """Extract entities like program names and applicant IDs from user message"""
         entities = {}
+        message_lower = user_message.lower()
         
         # Extract applicant ID (format: APP-XXXX)
         applicant_id_match = re.search(r'APP-\d{4}', user_message)
         if applicant_id_match:
             entities['applicant_id'] = applicant_id_match.group()
         
-        # Extract program names (case-insensitive)
-        for program_name in PROGRAMS_DB.keys():
-            if program_name.lower() in user_message.lower():
+        # Extract program names (case-insensitive, most specific first)
+        # Sort by length descending to match longer names first
+        sorted_programs = sorted(PROGRAMS_DB.keys(), key=len, reverse=True)
+        for program_name in sorted_programs:
+            if program_name.lower() in message_lower:
                 entities['program_name'] = program_name
                 break
         
@@ -67,43 +70,40 @@ class StudentEnrollmentAgent:
         
         # Extract entities from message
         entities = self.extract_entities(user_message)
+        program_name = entities.get('program_name')
+        applicant_id = entities.get('applicant_id')
         
-        # Logic to determine which tools to call
-        if any(keyword in message_lower for keyword in ["program", "offer", "course", "study"]):
-            # Query: Get program information
-            if "program" in message_lower or "computer science" in message_lower:
-                # Try to find program name
-                for prog_name in PROGRAMS_DB.keys():
-                    if prog_name.lower() in message_lower:
-                        tools_to_call.append(("get_program_info", {"program_name": prog_name}))
-                        session_context['current_program'] = prog_name
-                        break
-                else:
-                    # If no specific program found, check if user mentioned CS or similar
-                    if "computer science" in message_lower or "cs" in message_lower:
-                        tools_to_call.append(("get_program_info", {"program_name": "Computer Science"}))
-                        session_context['current_program'] = "Computer Science"
+        # Check what type of query this is
+        is_program_query = any(keyword in message_lower for keyword in ["program", "offer", "course", "study", "major", "duration", "tuition", "degree", "prerequisites"])
+        is_deadline_query = any(keyword in message_lower for keyword in ["deadline", "when", "due", "date", "submit", "window"])
+        is_status_query = any(keyword in message_lower for keyword in ["status", "application", "applied", "check", "documents", "required", "need", "submit"])
         
-        if any(keyword in message_lower for keyword in ["deadline", "when", "due date", "submit"]):
-            # Query: Get deadlines
-            if entities.get('program_name'):
-                tools_to_call.append(("get_deadlines", {"program_name": entities['program_name']}))
+        # Handle program information requests
+        if is_program_query:
+            if program_name:
+                # Specific program was mentioned
+                tools_to_call.append(("get_program_info", {"program_name": program_name}))
+                session_context['current_program'] = program_name
+            elif session_context.get('current_program'):
+                # Use previously mentioned program
+                tools_to_call.append(("get_program_info", {"program_name": session_context['current_program']}))
+            else:
+                # Ask user to specify which program
+                pass  # Will return generic message
+        
+        # Handle deadline requests
+        if is_deadline_query:
+            if program_name:
+                tools_to_call.append(("get_deadlines", {"program_name": program_name}))
+                session_context['current_program'] = program_name
             elif session_context.get('current_program'):
                 tools_to_call.append(("get_deadlines", {"program_name": session_context['current_program']}))
         
-        if any(keyword in message_lower for keyword in ["status", "application", "applied", "check"]):
-            # Query: Check application status
-            if entities.get('applicant_id'):
-                tools_to_call.append(("check_application_status", {"applicant_id": entities['applicant_id']}))
-                session_context['applicant_id'] = entities['applicant_id']
-            elif session_context.get('applicant_id'):
-                tools_to_call.append(("check_application_status", {"applicant_id": session_context['applicant_id']}))
-        
-        if any(keyword in message_lower for keyword in ["documents", "submit", "required", "need"]):
-            # This might need application status to provide document requirements
-            if entities.get('applicant_id'):
-                tools_to_call.append(("check_application_status", {"applicant_id": entities['applicant_id']}))
-                session_context['applicant_id'] = entities['applicant_id']
+        # Handle status requests
+        if is_status_query:
+            if applicant_id:
+                tools_to_call.append(("check_application_status", {"applicant_id": applicant_id}))
+                session_context['applicant_id'] = applicant_id
             elif session_context.get('applicant_id'):
                 tools_to_call.append(("check_application_status", {"applicant_id": session_context['applicant_id']}))
         

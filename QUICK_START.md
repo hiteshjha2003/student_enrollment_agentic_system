@@ -60,17 +60,17 @@ Frontend runs at: **http://localhost:3000**
 
 ## 🎯 Test Conversation
 
-1. **"Hi, what programs do you offer?"**
-   - Agent lists 5 programs with details
+1. **"Hi, what programs do you offer in computer science?"**
    
-2. **"Tell me about Computer Science"**
-   - Shows prerequisites, tuition, deadlines
    
-3. **"I applied with ID APP-1001"**
-   - Shows application status and next steps
+2. **"What's the application deadline for that?"**
    
-4. **"What do I need to submit?"**
-   - Shows required documents based on application status
+   
+3. **"Can I get a fee waiver?**
+   
+   
+4. **"What documents do I still need to submit?"**
+   
 
 ---
 

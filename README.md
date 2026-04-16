@@ -218,73 +218,19 @@ Expected output:
 
 Once both servers are running, open `http://localhost:3000` in your browser and test:
 
-#### **Turn 1: Ask about programs**
-```
-User: "Hi, what programs do you offer in computer science?"
 
-Agent Response:
-Here's the information about Computer Science:
-• Duration: 4 years
-• Tuition: $45,000 per year
-• Prerequisites: Math 101, Physics 101, English 101
+1. **"Hi, what programs do you offer in computer science?"**
+   
+   
+2. **"What's the application deadline for that?"**
+   
+   
+3. **"Can I get a fee waiver?**
+   
+   
+4. **"What documents do I still need to submit?"**
+   
 
-Tools Used: [get_program_info]
-```
-
-#### **Turn 2: Ask about deadlines**
-```
-User: "What's the application deadline for that?"
-
-Agent Response:
-Important deadlines for Computer Science:
-• Application Deadline: 2026-05-15
-• Document Submission Deadline: 2026-05-31
-• Decision Notification Date: 2026-07-01
-
-Tools Used: [get_deadlines]
-```
-
-#### **Turn 3: Check application status**
-```
-User: "I already applied. My ID is APP-1042. What's my status?"
-
-Agent Response:
-Your application status:
-• Name: John Smith
-• Program Applied To: Computer Science
-• Current Status: Under Review
-• Next Step: Submit official transcripts and SAT scores
-
-Tools Used: [check_application_status]
-```
-
-#### **Turn 4: Ask about fee waivers (out of scope)**
-```
-User: "Can I get a fee waiver?"
-
-Agent Response:
-I'd recommend speaking with an enrollment counselor for financial aid options 
-like fee waivers and scholarships. Would you like me to connect you with someone 
-from our financial aid office?
-
-Tools Used: []
-```
-
-#### **Turn 5: Ask about required documents**
-```
-User: "What documents do I still need to submit?"
-
-Agent Response:
-Your application status:
-• Name: John Smith
-• Program Applied To: Computer Science
-• Current Status: Under Review
-• Next Step: Submit official transcripts and SAT scores
-
-Tools Used: [check_application_status]
-```
-
----
 
 ## 🎨 UI Features
 
